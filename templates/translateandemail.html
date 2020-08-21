@@ -7,10 +7,55 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
 </head>
     <body>
-        <h2>Input</h2>
+    {# Navbar #}
+    <nav class="navbar narvbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">Home</a>
+            <a class="navbar-brand" href="/hello">Hello</a>
+            <a class="navbar-brand" href="/translateandemail">Send Emails</a>
+        </div>
+    </nav>
+
+        <!--<h2>Email Address</h2>
+        <p>Please write your email address, so we can contact you.</p>
         <form action="/mailsend" method="POST">
-            <input type="text" name="email"></input>
-            <input type="submit" value="MailSend"></input>
+            <input type="text" name="email" placeholder="Email Address"></input>
+            <input type="submit" value="Enter"></input>
+        </form> -->
+        
+    <section>
+        <h2>Add Contact</h2>
+        <form method="POST" action="/confirmation">
+            <div>
+                <input type="text" name="myemail" size="25" placeholder="Email Address"><br>
+                <input type="text" name="myname" size="25" placeholder="Name"><br>
+                <input type="text" name="mylanguage" size="25" placeholder="Preferred Language"><br>
+                <button type="submit">Submit</button>
+            </div>
         </form>
+    </section>
+
+    {# Email List #}
+    <section>
+        <h2>List of People</h2>
+        <ul>
+            {% for email in emails %}
+                <li><a href="mailto:{{ email.key.id_or_name }}"><p>{{ email.name }}</p></a></li>
+            {% else %}
+                <li><p>You have no contacts.</p></li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section>
+        <h2>Send Email to Group</h2>
+        <form method="POST" action="/mailsend">
+            <div>
+                <input type="text" name="mysubject" size="25" placeholder="Subject"><br>
+                <input type="text" name="mybody" size="25" placeholder="Body"><br>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </section>
     </body>
 </html>

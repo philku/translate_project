@@ -11,6 +11,7 @@ import requests
 from email.utils import make_msgid
 import uuid
 import datetime
+from flask import Flask, request, render_template, redirect
 
 app = Flask(__name__)   # Flask is the web framework we're using
 
@@ -86,24 +87,21 @@ def sendMessage():
         if lang != "English":
             emailSub = translate_client.translate(emailSub, target_language = lang_codes[lang])["translatedText"]
             emailMsg = translate_client.translate(emailMsg, target_language = lang_codes[lang])["translatedText"]
-        #MIME is the program/API that actually talks
+        #MIME is the program/API that actually talks to
         mimeMessage["subject"] = emailSub
         mimeMessage.attach(MIMEText(emailMsg, 'plain'))
         raw_string = base64.urlsafe_b64encode(mimeMessage.as_bytes()).decode()
         #Actually sends email
         message = service1.users().messages().send(userId='me', body={'raw': raw_string}).execute()
-
-
         m_key = client.key("Messages", mId)
-        
-#This code provides the UUID and sends it to the Streaminfo database
+        #This code provides the UUID and sends it to the Streaminfo database
         streamID = str(uuid.uuid1())
         d = datetime.datetime.now()
         complete_key = client.key("Streaminfo", streamID)
         contact = datastore.Entity(key=complete_key)
         contact.update({
         'email': entity.key.id_or_name,
-        "studref":entity
+        "studref": entity
         })
         client.put(contact)
 
